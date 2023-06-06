@@ -57,7 +57,7 @@ class ClientController extends Controller
                 'secret_key' => $sk,
             ]);
             $user_id = $user->id;
-            $user->password = Hash::make('edsk' . $user_id . '-' . $sk);
+            $user->password = Hash::make('eduthon_sk' . $user_id . '-' . $sk);
             $user->secret_key = 'eduthon_sk' . $user_id . '-' . $sk;
             $user->update();
 
