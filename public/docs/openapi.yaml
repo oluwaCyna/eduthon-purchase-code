@@ -1,0 +1,248 @@
+openapi: 3.0.3
+info:
+  title: 'Eduthon Purchase Code Verifier'
+  description: 'This is a Delwathon purchase code verifier API documentation for eduthon product'
+  version: 1.0.0
+servers:
+  -
+    url: 'http://localhost'
+paths:
+  /api/authenticate:
+    post:
+      summary: Authenticate.
+      operationId: authenticate
+      description: 'This endpoint allows you to authenticate a user.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: success
+                  token: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiMWU4YWYwMDM0YTIwODlmOTU3ZTAwNmUwMDAxM2M3NjUzNTNkZTEwNzQ4NjE4ZmI0YzhhODU4ZjYxZjQxNWE4NTEyZGI2YzUzNTQxMjI4OGQiLCJpYXQiOjE2ODYwNTc1MDguOTYxMDI1LCJuYmYiOjE2ODYwNTc1MDguOTYxMDI4LCJleHAiOjE3MTc2Nzk5MDguOTQ2MDg1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.oY8nKLaDuxm7khkD_HOkkUfsyW2Q-vtPSipZjF-TsbVs82k8ptzXPhYBpQYS5RiET-xWhfOUjwwzJm2zk3hazLgrkYehm2b0uD2TZd__p5nLcQ_mYaPYg1JPQxJISD-wSUeY7cn0L95Cng-1UIq9dYM3D3NzzDd5o7_qAL5NBiw86YnFm8YbsKfYrPkr929SjC0mXA2TBD35QOuLgrLpsyZwe3ZWTOI3LSX4cORNUAUg3Af8IpDfDhmU7LGcAegZD8ORDVzCPIoLQsA2wEN---RxpTjPL1pRMBGOByLOI04KnrrmyIOJCo11EaNZ9wB9w_Vmynins86k7c_o4Bm70x6TG8ZXOi2Ao4tD7CBCUo5jB_1RBGK9GAWL6_EuINvS0OmuQq1AkTcSEYv1-Y4FnAQ9z_F7LSkjpg_Q1fSIwfMK5eJtv86aItwUbYgOAPizRSLsjk882JEu-JmV3RxTwFAufnPPWlYbarlRDLKjzG30JDjO2B3qiP5I3lz4RK2KSm0o3WsYIFvq-Ur80ejf-L8SeJJpplR4oLdCYpaPrGJKBN5bvVL3062pnWDN2WVxuhLAhxl2ZNisqj3i0BAhkaEnklVHgeRkLbtEAZ8SYARqYmmeyWJZ9s1W4gxqkro65GGm-aL7uLLrjJj7ltdbzsMFM7Kg0U4izkW3UCSJyUw
+                  user_id: 1
+                properties:
+                  message:
+                    type: string
+                    example: success
+                  token:
+                    type: string
+                    example: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiMWU4YWYwMDM0YTIwODlmOTU3ZTAwNmUwMDAxM2M3NjUzNTNkZTEwNzQ4NjE4ZmI0YzhhODU4ZjYxZjQxNWE4NTEyZGI2YzUzNTQxMjI4OGQiLCJpYXQiOjE2ODYwNTc1MDguOTYxMDI1LCJuYmYiOjE2ODYwNTc1MDguOTYxMDI4LCJleHAiOjE3MTc2Nzk5MDguOTQ2MDg1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.oY8nKLaDuxm7khkD_HOkkUfsyW2Q-vtPSipZjF-TsbVs82k8ptzXPhYBpQYS5RiET-xWhfOUjwwzJm2zk3hazLgrkYehm2b0uD2TZd__p5nLcQ_mYaPYg1JPQxJISD-wSUeY7cn0L95Cng-1UIq9dYM3D3NzzDd5o7_qAL5NBiw86YnFm8YbsKfYrPkr929SjC0mXA2TBD35QOuLgrLpsyZwe3ZWTOI3LSX4cORNUAUg3Af8IpDfDhmU7LGcAegZD8ORDVzCPIoLQsA2wEN---RxpTjPL1pRMBGOByLOI04KnrrmyIOJCo11EaNZ9wB9w_Vmynins86k7c_o4Bm70x6TG8ZXOi2Ao4tD7CBCUo5jB_1RBGK9GAWL6_EuINvS0OmuQq1AkTcSEYv1-Y4FnAQ9z_F7LSkjpg_Q1fSIwfMK5eJtv86aItwUbYgOAPizRSLsjk882JEu-JmV3RxTwFAufnPPWlYbarlRDLKjzG30JDjO2B3qiP5I3lz4RK2KSm0o3WsYIFvq-Ur80ejf-L8SeJJpplR4oLdCYpaPrGJKBN5bvVL3062pnWDN2WVxuhLAhxl2ZNisqj3i0BAhkaEnklVHgeRkLbtEAZ8SYARqYmmeyWJZ9s1W4gxqkro65GGm-aL7uLLrjJj7ltdbzsMFM7Kg0U4izkW3UCSJyUw
+                  user_id:
+                    type: integer
+                    example: 1
+        400:
+          description: 'Server error'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Server error'
+                properties:
+                  message:
+                    type: string
+                    example: 'Server error'
+        401:
+          description: 'Wrong secret key was used'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid Secret Key'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid Secret Key'
+        422:
+          description: 'Required parameter not found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'secret_key is required'
+                properties:
+                  message:
+                    type: string
+                    example: 'secret_key is required'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                secret_key:
+                  type: string
+                  description: 'The secret key of the client.'
+                  example: eduthon_sk35-vGY1XVZcU88tgues
+              required:
+                - secret_key
+      security: []
+  /api/client:
+    post:
+      summary: 'Register new client.'
+      operationId: registerNewClient
+      description: 'This endpoint allows you to add a new client, then generate secret code for the client and a purchase code for the app.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  purchase_code: Oygfl-2yigH-VRWX8-dgEshd-RllUa
+                  secret_key: eduthon_sk35-vGY1XVZcU88tgues
+                  message: 'Account created successfully'
+                properties:
+                  purchase_code:
+                    type: string
+                    example: Oygfl-2yigH-VRWX8-dgEshd-RllUa
+                  secret_key:
+                    type: string
+                    example: eduthon_sk35-vGY1XVZcU88tgues
+                  message:
+                    type: string
+                    example: 'Account created successfully'
+        400:
+          description: 'Server error'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Server error'
+                properties:
+                  message:
+                    type: string
+                    example: 'Server error'
+        422:
+          description: 'Required parameter not found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'firstname is required'
+                properties:
+                  message:
+                    type: string
+                    example: 'firstname is required'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstname:
+                  type: string
+                  description: "Client's firstname."
+                  example: john
+                lastname:
+                  type: string
+                  description: "Client's lastname."
+                  example: Doe
+                email:
+                  type: email
+                  description: "Client's email."
+                  example: johndoe@example.com
+              required:
+                - firstname
+                - lastname
+                - email
+      security: []
+  /api/verify:
+    post:
+      summary: "Verify client's purchase code."
+      operationId: verifyClientsPurchaseCode
+      description: 'This endpoint allows you to verify the purchase code inputed by the client and also checjk if the has been used on some other application.'
+      parameters:
+        -
+          in: header
+          name: Authorization
+          description: ''
+          example: 'Bearer {YOUR_AUTH_KEY}'
+          schema:
+            type: string
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: success
+                properties:
+                  message:
+                    type: string
+                    example: success
+        400:
+          description: 'Server error'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Server error'
+                properties:
+                  message:
+                    type: string
+                    example: 'Server error'
+        401:
+          description: 'Invalid purchase code'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Failed, Invalid purchase code'
+                properties:
+                  message:
+                    type: string
+                    example: 'Failed, Invalid purchase code'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                purchase_code:
+                  type: string
+                  description: 'The secret key of the client.'
+                  example: Oygfl-2yigH-VRWX8-dgEshd-RllUa
+                client_id:
+                  type: integer
+                  description: 'The secret key of the client.'
+                  example: 3
+              required:
+                - purchase_code
+                - client_id
+tags:
+  -
+    name: Endpoints
+    description: ''
+components:
+  securitySchemes:
+    default:
+      type: http
+      scheme: bearer
+      description: ''
+security:
+  -
+    default: []

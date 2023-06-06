@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\Auth\LoginController;
-use App\Http\Controllers\Api\Auth\RegisterController;
+use App\Http\Controllers\Api\Auth\AuthenticateController;
+use App\Http\Controllers\Api\Auth\ClientController;
 use App\Http\Controllers\Api\VerifyCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -17,12 +17,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('authenticate');
-Route::post('client', [RegisterController::class, 'client'])->name('client');
+Route::post('/authenticate', [AuthenticateController::class, 'authenticate'])->name('authenticate');
+Route::post('client', [ClientController::class, 'client'])->name('client');
 
 Route::middleware(['auth:api'])->group(function () {
     Route::post('verify', [VerifyCode::class, 'verify'])->name('verify');

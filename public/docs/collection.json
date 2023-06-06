@@ -1,0 +1,200 @@
+{
+    "variable": [
+        {
+            "id": "baseUrl",
+            "key": "baseUrl",
+            "type": "string",
+            "name": "string",
+            "value": "http:\/\/localhost"
+        }
+    ],
+    "info": {
+        "name": "Eduthon Purchase Code Verifier",
+        "_postman_id": "b9393b8d-6c98-4272-9a90-f9ac122a8e07",
+        "description": "This is a Delwathon purchase code verifier API documentation for eduthon product",
+        "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
+    },
+    "item": [
+        {
+            "name": "Endpoints",
+            "description": "",
+            "item": [
+                {
+                    "name": "Authenticate.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/authenticate",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/authenticate"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"secret_key\":\"eduthon_sk35-vGY1XVZcU88tgues\"}"
+                        },
+                        "description": "This endpoint allows you to authenticate a user.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n \"message\": \"success\",\n \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiMWU4YWYwMDM0YTIwODlmOTU3ZTAwNmUwMDAxM2M3NjUzNTNkZTEwNzQ4NjE4ZmI0YzhhODU4ZjYxZjQxNWE4NTEyZGI2YzUzNTQxMjI4OGQiLCJpYXQiOjE2ODYwNTc1MDguOTYxMDI1LCJuYmYiOjE2ODYwNTc1MDguOTYxMDI4LCJleHAiOjE3MTc2Nzk5MDguOTQ2MDg1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.oY8nKLaDuxm7khkD_HOkkUfsyW2Q-vtPSipZjF-TsbVs82k8ptzXPhYBpQYS5RiET-xWhfOUjwwzJm2zk3hazLgrkYehm2b0uD2TZd__p5nLcQ_mYaPYg1JPQxJISD-wSUeY7cn0L95Cng-1UIq9dYM3D3NzzDd5o7_qAL5NBiw86YnFm8YbsKfYrPkr929SjC0mXA2TBD35QOuLgrLpsyZwe3ZWTOI3LSX4cORNUAUg3Af8IpDfDhmU7LGcAegZD8ORDVzCPIoLQsA2wEN---RxpTjPL1pRMBGOByLOI04KnrrmyIOJCo11EaNZ9wB9w_Vmynins86k7c_o4Bm70x6TG8ZXOi2Ao4tD7CBCUo5jB_1RBGK9GAWL6_EuINvS0OmuQq1AkTcSEYv1-Y4FnAQ9z_F7LSkjpg_Q1fSIwfMK5eJtv86aItwUbYgOAPizRSLsjk882JEu-JmV3RxTwFAufnPPWlYbarlRDLKjzG30JDjO2B3qiP5I3lz4RK2KSm0o3WsYIFvq-Ur80ejf-L8SeJJpplR4oLdCYpaPrGJKBN5bvVL3062pnWDN2WVxuhLAhxl2ZNisqj3i0BAhkaEnklVHgeRkLbtEAZ8SYARqYmmeyWJZ9s1W4gxqkro65GGm-aL7uLLrjJj7ltdbzsMFM7Kg0U4izkW3UCSJyUw\",\n \"user_id\": 1\n }",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 400,
+                            "body": "{\"message\": \"Server error\"}",
+                            "name": "Server error"
+                        },
+                        {
+                            "header": [],
+                            "code": 401,
+                            "body": "{\"message\": \"Invalid Secret Key\"}",
+                            "name": "Wrong secret key was used"
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\"message\": \"secret_key is required\"}",
+                            "name": "Required parameter not found"
+                        }
+                    ]
+                },
+                {
+                    "name": "Register new client.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/client",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/client"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"firstname\":\"john\",\"lastname\":\"Doe\",\"email\":\"johndoe@example.com\"}"
+                        },
+                        "description": "This endpoint allows you to add a new client, then generate secret code for the client and a purchase code for the app.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n \"purchase_code\": \"Oygfl-2yigH-VRWX8-dgEshd-RllUa\",\n \"secret_key\": \"eduthon_sk35-vGY1XVZcU88tgues\",\n \"message\": \"Account created successfully\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 400,
+                            "body": "{\"message\": \"Server error\"}",
+                            "name": "Server error"
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\"message\": \"firstname is required\"}",
+                            "name": "Required parameter not found"
+                        }
+                    ]
+                },
+                {
+                    "name": "Verify client's purchase code.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/verify",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/verify"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"purchase_code\":\"Oygfl-2yigH-VRWX8-dgEshd-RllUa\",\"client_id\":3}"
+                        },
+                        "description": "This endpoint allows you to verify the purchase code inputed by the client and also checjk if the has been used on some other application."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"message\": \"success\"}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 400,
+                            "body": "{\"message\": \"Server error\"}",
+                            "name": "Server error"
+                        },
+                        {
+                            "header": [],
+                            "code": 401,
+                            "body": "{\"message\": \"Failed, No purchase code for this account\"}",
+                            "name": "Client not authenticated"
+                        },
+                        {
+                            "header": [],
+                            "code": 401,
+                            "body": "{\"message\": \"Failed, This code has been used for another application\"}",
+                            "name": "Purchase code already used on another application"
+                        },
+                        {
+                            "header": [],
+                            "code": 401,
+                            "body": "{\"message\": \"Failed, Invalid purchase code\"}",
+                            "name": "Invalid purchase code"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "Authorization",
+                "value": null,
+                "type": "string"
+            }
+        ]
+    }
+}
