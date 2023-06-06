@@ -20,7 +20,6 @@ class RegisterController extends Controller
             'firstname' => 'required|string',
             'lastname' => 'required|string',
             'email' => 'required|unique:users',
-            'secret_key' => 'required|unique:users',
         ]);
 
         if ($validation->fails()) {
@@ -30,17 +29,23 @@ class RegisterController extends Controller
         }
 
         try {
+            $sk = Str::random(16);
             $user = User::create([
                 'firstname' =>  $request->firstname,
                 'lastname' =>  $request->lastname,
                 'email' => $request->email,
-                'password' => Hash::make($request->secret_key),
-                'secret_key' => $request->secret_key,
+                'password' => Hash::make($sk),
+                'secret_key' => $sk,
             ]);
+            $user_id = $user->id;
+            $user->password = Hash::make('edsk'.$user_id.'-'.$sk);
+            $user->secret_key = 'eduthon_sk'.$user_id.'-'.$sk;
+            $user->update();
 
+            $pc = Str::random(5).'-'.Str::random(5).'-'.Str::random(5).'-'.Str::random(5).'-'.Str::random(5);
             $PurchaseCodes = PurchaseCodes::create([
-                'user_id' => $user->id,
-                'purchase_code' => base64_encode(Str::random(12))
+                'user_id' => $user_id,
+                'purchase_code' => $pc
             ]);
 
             return response([
