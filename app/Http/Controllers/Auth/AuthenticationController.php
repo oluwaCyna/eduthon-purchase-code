@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Auth;
+namespace App\Http\Controllers\Auth;
 
 use Exception;
 use Illuminate\Http\Request;
@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class AuthenticateController extends Controller
+class AuthenticationController extends Controller
 {
     /**
      * Authenticate.
@@ -48,7 +48,7 @@ class AuthenticateController extends Controller
                 return response([
                     'message' => 'success',
                     'token' => $token,
-                    'user_id' => $user->id
+                    'user' => $user
                 ], 200);
             } else {
                 return response([

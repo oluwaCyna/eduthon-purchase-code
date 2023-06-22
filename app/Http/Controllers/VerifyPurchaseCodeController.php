@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\PurchaseCodes;
+use App\Models\Subscriptions;
 use Exception;
 use Illuminate\Http\Request;
 
-class VerifyCode extends Controller
+class VerifyPurchaseCodeController extends Controller
 {
     /**
      * Verify client's purchase code.
@@ -18,7 +19,7 @@ class VerifyCode extends Controller
      * 
      * @header Content-Type application/json
      * 
-     * @bodyParam purchase_code string required The secret key of the client. Example: Oygfl-2yigH-VRWX8-dgEshd-RllUa
+     * @bodyParam purchase_code string required The purcahse code for the application. Example: Oygfl-2yigH-VRWX8-dgEshd-RllUa
      * @bodyParam client_id int required The secret key of the client. Example: 3
      * 
      * @response {"message": "success"}
@@ -42,10 +43,41 @@ class VerifyCode extends Controller
                 if ($purchaseCode->url === null) {
                     $purchaseCode->url = $request->url;
                     $purchaseCode->update();
+
+                    //We have 5 core modules that are free
+                    for ($i=1; $i < 6; $i++) { 
+                    Subscriptions::updateOrCreate([
+                        'package_module_id' => $i,
+                        'purchase_code_id' => $purchaseCode->id
+                    ], [
+                        'package_module_id' => $i,
+                        'purchase_code_id' => $purchaseCode->id,
+                        'status' => 2,
+                        'interval' => null,
+                        'subscription_date' => date('Y-m-d', strtotime(now())),
+                        'expiry_date' => null
+                    ]);
+                    }
+
                     return response([
                         'message' => 'success',
                     ], 200);
                 } elseif ($purchaseCode->url === $request->url) {
+                    //We have 5 core modules that are free
+                    for ($i=1; $i < 6; $i++) { 
+                        Subscriptions::updateOrCreate([
+                            'package_module_id' => $i,
+                            'purchase_code_id' => $purchaseCode->id
+                        ], [
+                            'package_module_id' => $i,
+                            'purchase_code_id' => $purchaseCode->id,
+                            'status' => 2,
+                            'interval' => null,
+                            'subscription_date' => date('Y-m-d', strtotime(now())),
+                            'expiry_date' => null
+                        ]);
+                        }
+
                     return response([
                         'message' => 'success',
                     ], 200);

@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\Api\Auth\AuthenticateController;
-use App\Http\Controllers\Api\Auth\ClientController;
-use App\Http\Controllers\Api\VerifyCode;
+use App\Http\Controllers\Auth\AddClientController;
+use App\Http\Controllers\Auth\AuthenticationController;
+use App\Http\Controllers\VerifyPurchaseCodeController;
+use App\Http\Controllers\SubscriptionsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,10 +18,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/authenticate', [AuthenticateController::class, 'authenticate'])->name('authenticate');
-Route::post('client', [ClientController::class, 'client'])->name('client');
+Route::post('/authenticate', [AuthenticationController::class, 'authenticate'])->name('authenticate');
+Route::post('client', [AddClientController::class, 'client'])->name('client');
 
 Route::middleware(['auth:api'])->group(function () {
-    Route::post('verify', [VerifyCode::class, 'verify'])->name('verify');
+    Route::post('verify', [VerifyPurchaseCodeController::class, 'verify'])->name('verify');
 
+    Route::post('/subscribe/flutter', [SubscriptionsController::class, 'handleFlutterwaveRequest'])->name('flutterwave');
+    Route::patch('/activate', [SubscriptionsController::class, 'activate'])->name('activate');
 });
