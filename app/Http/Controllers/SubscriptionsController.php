@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PackageModules;
 use App\Models\PurchaseCodes;
 use App\Models\Subscriptions;
+use App\Models\TemporaryRedirectUrl;
 use App\Models\Transactions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -32,7 +33,8 @@ class SubscriptionsController extends Controller
      * @bodyParam purchase_code string required The purcahse code for the application. Example: Oygfl-2yigH-VRWX8-dgEshd-RllUa
      * @bodyParam package_id int required The id of the package module. Example: 3 
      * 
-     * @response {"message": "success", "redirect":"https://api.flutterwave.com/v3/hosted/pay/f524c1196ffda5556341"}
+     * @response {"message": "success", "redirect":"https://api.flutterwave.com/v3/hosted/pay/f524c11fgffda5556341"}
+     * @response status=200 scenario="Final GET response after fully processed payment request" https://example.com?status=sucesss$code=200  
      * 
      * @response status=401 scenario="Client not authenticated" 
      * @response status=422 scenario="Required parameter not found" {"message": "firstname is required"}
@@ -42,15 +44,12 @@ class SubscriptionsController extends Controller
      */
     public function handleFlutterwaveRequest(Request $request)
     {
-        session_start();
         $validation = Validator::make($request->all(), [
             'firstname' => 'required|string',
             'lastname' => 'required|string',
             'email' => 'required|unique:users',
             'currency' => 'required|string',
-            // 'amount' => 'required|string',
             'package_id' => 'required|integer',
-            // 'package_name' => 'required|string',
             'purchase_code' => 'required|string',
             'url' => 'required|url'
         ]);
@@ -86,7 +85,6 @@ class SubscriptionsController extends Controller
                 ],
                 'customer' => [
                     'email' => $request->email,
-                    // 'phonenumber'=> "080****4528",
                     'name' => $request->firstname . ' ' . $request->lastname,
                 ],
                 'customizations' => [
@@ -96,6 +94,10 @@ class SubscriptionsController extends Controller
             ])->json();
 
             if ($response['status'] === 'success') {
+                TemporaryRedirectUrl::updateOrCreate([
+                    'ref' => $ref,
+                    'url' => $request->url
+                ]);
                 return response([
                     'message' => 'success',
                     'redirect' => $response['data']['link']
@@ -137,12 +139,9 @@ class SubscriptionsController extends Controller
 
             // Save Transaction record
             $response = json_decode($response->body())->data;
-            $tx_ref = $response->tx_ref;
-            $payment_type = $response->payment_type;
-
             $datas = json_decode($response->meta->data);
 
-            // Set the status to 1, subscribed
+            // Set the status to subscribed
             $purchase_code = PurchaseCodes::where('purchase_code', $datas->purchase_code)->first();
             Subscriptions::updateOrCreate([
                 'package_module_id' => $datas->id,
@@ -161,34 +160,26 @@ class SubscriptionsController extends Controller
                 'purchase_code_id' => $purchase_code->id,
                 'user_id' => $purchase_code->user_id,
                 'amount' => $response->amount,
+                'payment_type' => $response->payment_type,
                 'expiry_date' => Carbon::parse($response->created_at)->addYears(1)->subDay(1)->format('Y-m-d'),
-                'ref' => $tx_ref,
+                'ref' => $response->tx_ref
             ]);
             return redirect($datas->url . '?status=sucesss$code=200');
         }
 
         if ($request->status === 'failed') {
-            return redirect($_COOKIE['url'] . '?status=failed$code=401&message=' . $request['message']);
+            $url = TemporaryRedirectUrl::where('ref', $request->tx_ref)->first()->url;
+            return redirect($url . '?status=failed$code=401');
         }
 
         if ($request->status === 'cancelled') {
-            $transaction_ref = $request->tx_ref;
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . env('FLUTTERWAVE_SECRET_KEY'),
-                'Content-Type' => 'application/json'
-            ])->get('https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref=' . $transaction_ref);
-            dd($response->body());
-
-            $response = json_decode($response->body())->data;
-
-            dd($_COOKIE);
-            dd(Config::get('flutter_final_url.url'));
-            return redirect($_COOKIE['url'] . '?status=cancelled$code=401&message=' . $request['message']);
+            $url = TemporaryRedirectUrl::where('ref', $request->tx_ref)->first()->url;
+            return redirect($url . '?status=cancelled$code=401');
         }
     }
 
     /**
-     * Subscription payment - FLUTTERWAVE.
+     * Activate Subscription.
      *
      * This endpoint allows you to activate a module subscribed for. You need to authenticate with the authentication endpoint so you cabn have access to the token.
      * 
