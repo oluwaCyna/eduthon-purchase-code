@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PackageModules;
 use App\Models\PurchaseCodes;
 use App\Models\Subscriptions;
+use App\Models\Transactions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -60,9 +61,9 @@ class SubscriptionsController extends Controller
             ], 422);;
         }
 
-        Config::set('flutter_final_url.url', $request->url);
-        $_SESSION['url'] = 'ujdfnjhgjgk';
-        setcookie('url', $request->url, time() + 60 * 60 * 24 * 365, '/');
+        // Config::set('flutter_final_url.url', $request->url);
+        // $_SESSION['url'] = 'ujdfnjhgjgk';
+        // setcookie('url', $request->url, time() + 60 * 60 * 24 * 365, '/');
         $package = PackageModules::find($request->package_id);
 
         try {
@@ -149,26 +150,20 @@ class SubscriptionsController extends Controller
             ], [
                 'package_module_id' => $datas->id,
                 'purchase_code_id' => $purchase_code->id,
-                'status' => 1,
+                'status' => 'subscribed',
                 'interval' => '1 year',
                 'subscription_date' => date('Y-m-d', strtotime($response->created_at)),
                 'expiry_date' => Carbon::parse($response->created_at)->addYears(1)->subDay(1)->format('Y-m-d')
             ]);
 
-            // Transaction::create([
-            //     'branch_id' => $branch,
-            //     'account_id' => 1, 
-            //     'voucher_id' => 1,  
-            //     'invoice_no' => $invoice_no,
-            //     'ref' => $tx_ref,
-            //     'amount' => $response->amount,
-            //     'date' => date('Y-m-d', strtotime($created_at)),
-            //     'mode' => ucwords(strtolower($payment_type)),
-            //     'description' => '',
-            //     'paid_by' => auth_user()->id,
-            //     'paid_for' => $user_id
-
-            // ]);
+            Transactions::create([
+                'package_module_id' => $datas->id,
+                'purchase_code_id' => $purchase_code->id,
+                'user_id' => $purchase_code->user_id,
+                'amount' => $response->amount,
+                'expiry_date' => Carbon::parse($response->created_at)->addYears(1)->subDay(1)->format('Y-m-d'),
+                'ref' => $tx_ref,
+            ]);
             return redirect($datas->url . '?status=sucesss$code=200');
         }
 
@@ -231,8 +226,8 @@ class SubscriptionsController extends Controller
                 'purchase_code_id' => $purchase_code->id
             ])->first();
 
-            if ($sub->status == 0) {
-                $sub->status = 2;
+            if ($sub->status == 'subscribed') {
+                $sub->status = 'activated';
                 $sub->update();
 
                 return response([
